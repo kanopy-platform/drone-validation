@@ -17,14 +17,10 @@ import (
 
 // spec provides the plugin settings.
 type spec struct {
-	Bind   string `envconfig:"DRONE_BIND"`
-	Debug  bool   `envconfig:"DRONE_DEBUG"`
-	Secret string `envconfig:"DRONE_SECRET"`
-
-	// TODO replace or remove these configuration
-	// parameters. They are for demo purposes only.
-	MinSize int `envconfig:"DRONE_MIN_SIZE"`
-	MaxSize int `envconfig:"DRONE_MAX_SIZE"`
+	Bind       string `envconfig:"DRONE_BIND"`
+	Debug      bool   `envconfig:"DRONE_DEBUG"`
+	Secret     string `envconfig:"DRONE_SECRET"`
+	PolicyPath string `envconfig:"DRONE_POLICY_PATH"`
 }
 
 func main() {
@@ -47,10 +43,7 @@ func main() {
 	handler := validator.Handler(
 		spec.Secret,
 		plugin.New(
-			// TODO replace or remove these configuration
-			// parameters. They are for demo purposes only.
-			spec.MinSize,
-			spec.MaxSize,
+			spec.PolicyPath,
 		),
 		logrus.StandardLogger(),
 	)
