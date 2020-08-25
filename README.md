@@ -22,6 +22,12 @@ $ docker run -d \
   --name=moo registry.example.com/drone-validation
 ```
 
+If you are deploying locally using helm:
+
+```console
+$ helm install -n drone-validation -f ./environment/dev.yaml mongodb/web-app
+```
+
 Update your Drone server environment variables to include the plugin address and the shared secret.
 
 ```text
