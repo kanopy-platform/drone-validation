@@ -1,0 +1,42 @@
+---
+kind: pipeline
+type: kubernetes
+name: default
+
+steps:
+  - name: go-test
+    image: golang:1.16
+    commands:
+      - make go-test
+
+  - name: build
+    image: golang:1.16
+    environment:
+      USERNAME:
+        from_secret: username
+      PASSWORD:
+        from_secret: password
+    commands:
+      - make build
+
+trigger:
+  event:
+    exclude:
+      - promote
+  branch:
+    - master
+
+---
+kind: pipeline
+type: kubernetes
+name: publish
+
+steps:
+  - name: publish
+    image: plugins/github-release
+    settings:
+      api_key:
+        from_secret: github_api_key
+      files: dist/*
+    when:
+      event: promote

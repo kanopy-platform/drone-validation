@@ -1,0 +1,13 @@
+---
+kind: pipeline type: kubernetes
+name: publish
+
+steps:
+  - name: publish
+    image: plugins/github-release
+    settings:
+      api_key:
+        from_secret: github_api_key
+      files: dist/*
+    when:
+      event: promote

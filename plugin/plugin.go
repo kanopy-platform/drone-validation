@@ -13,11 +13,10 @@ import (
 
 	"github.com/drone/drone-go/plugin/validator"
 	"github.com/open-policy-agent/opa/rego"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 )
 
-// New returns a new validator plugin.
 func New(policy string) validator.Plugin {
 	return &plugin{
 		policyPath: policy,
@@ -28,16 +27,16 @@ func (p *plugin) Validate(ctx context.Context, req *validator.Request) error {
 
 	var droneConfig DroneConfig
 
-	logrus.SetFormatter(&logrus.JSONFormatter{})
-	logrus.SetOutput(os.Stdout)
+	log.SetFormatter(&log.JSONFormatter{})
+	log.SetOutput(os.Stdout)
 
 	promotion := Promotion{
 		Build:       req.Build.Parent,
 		Environment: req.Build.Deploy,
 	}
 
-	// log each request received for audit purposes
-	logrus.WithFields(logrus.Fields{
+	// log each request for audit purposes
+	log.WithFields(log.Fields{
 		"extension":  "validation",
 		"user":       req.Build.Sender,
 		"event":      req.Build.Event,
@@ -67,12 +66,8 @@ func (p *plugin) Validate(ctx context.Context, req *validator.Request) error {
 	}
 
 	if rs[0].Bindings["deny"] == true {
-		message := fmt.Sprintf("[validator] %v", rs[0].Bindings["msg"])
+		message := fmt.Sprintf("pipeline %v", rs[0].Bindings["msg"])
 		return errors.New(message)
-	}
-
-	if err != nil {
-		return err
 	}
 
 	return nil
