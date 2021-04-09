@@ -12,6 +12,7 @@ import (
 
 	"github.com/drone/drone-go/drone"
 	"github.com/drone/drone-go/plugin/validator"
+	"github.com/sirupsen/logrus"
 )
 
 var noContext = context.Background()
@@ -20,29 +21,26 @@ const mockToken = "aec773e677ebc489d4e0193c8b971234"
 
 var req = &validator.Request{
 	Build: drone.Build{
-		After: "3d21ec53a331a6f037a91c368710b99387d012c1",
+		After:  "3d21ec53a331a6f037a91c368710b99387d012c1",
 		Parent: 1,
 		Deploy: "production",
 		Sender: "test",
-		Event: "promote",
-
+		Event:  "promote",
 	},
 	Repo: drone.Repo{
 		Slug:   "repo/test",
 		Config: ".drone.yml",
 		Branch: "main",
-
 	},
-	Config: drone.Config{
-	},
+	Config: drone.Config{},
 }
 
 func getSamplePipeline(sample string) (string, error) {
 	path := filepath.Join("samples", sample)
 	sampleData, err := ioutil.ReadFile(path)
-		if err != nil {
-			return "", err
-		}
+	if err != nil {
+		return "", err
+	}
 	return string(sampleData), err
 }
 
@@ -66,6 +64,9 @@ func checkOutput(plugin validator.Plugin, sampleFile, expected string) func(*tes
 }
 
 func TestPlugin(t *testing.T) {
+	// suppress audit log messages
+	logrus.SetOutput(ioutil.Discard)
+
 	plugin := New("../policy/validation.rego")
 	pipeline, err := getSamplePipeline("authorized-type.yml")
 	if err != nil {
@@ -84,4 +85,19 @@ func TestPlugin(t *testing.T) {
 	t.Run("unauthorized pipeline type", checkOutput(plugin, "unauthorized-type.yml", "pipeline type 'k8s' is not supported"))
 	t.Run("empty pipeline type", checkOutput(plugin, "default-type.yml", "pipeline type 'docker' is not supported"))
 	t.Run("broken pipeline config file", checkOutput(plugin, "broken-config.yml", "yaml: line 2: mapping values are not allowed in this context"))
+}
+
+func TestValidateInvalidPolicy(t *testing.T) {
+	plugin := New("samples/empty.rego")
+	pipeline, err := getSamplePipeline("authorized-type.yml")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	req.Config.Data = pipeline
+	err = plugin.Validate(noContext, req)
+	if err == nil {
+		t.Error(err)
+		return
+	}
 }
