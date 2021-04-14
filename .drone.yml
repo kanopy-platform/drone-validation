@@ -14,7 +14,7 @@ steps:
     image: plugins/docker
     settings:
       registry: quay.io
-      repo: quay.io/mongodb-labs/drone-validation
+      repo: quay.io/mongodb/drone-validation
       tags:
         - git-${DRONE_COMMIT_SHA:0:7}
         - latest
@@ -32,7 +32,7 @@ steps:
     image: plugins/docker
     settings:
       registry: quay.io
-      repo: quay.io/mongodb-labs/drone-validation
+      repo: quay.io/mongodb/drone-validation
       tags:
         - git-${DRONE_COMMIT_SHA:0:7}
         - ${DRONE_TAG}
