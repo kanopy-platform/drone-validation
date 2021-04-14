@@ -18,8 +18,3 @@ type DroneConfig struct {
 		Branch []string `yaml:"branch" json:"branch"`
 	} `yaml:"trigger" json:"trigger"`
 }
-
-type Promotion struct {
-	Build       int64  `json:"build,omitempty"`
-	Environment string `json:"environment,omitempty"`
-}

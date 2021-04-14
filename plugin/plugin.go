@@ -8,11 +8,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/drone/drone-go/plugin/validator"
 	"github.com/open-policy-agent/opa/rego"
-	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 )
 
@@ -25,24 +23,6 @@ func New(policy string) validator.Plugin {
 func (p *plugin) Validate(ctx context.Context, req *validator.Request) error {
 
 	var droneConfig DroneConfig
-
-	log.SetFormatter(&log.JSONFormatter{})
-
-	promotion := Promotion{
-		Build:       req.Build.Parent,
-		Environment: req.Build.Deploy,
-	}
-
-	// log each request for audit purposes
-	log.WithFields(log.Fields{
-		"extension":  "validation",
-		"user":       req.Build.Sender,
-		"event":      req.Build.Event,
-		"repository": req.Repo.Slug,
-		"branch":     req.Repo.Branch,
-		"commit":     req.Build.After,
-		"promotion":  &promotion,
-	}).Info(fmt.Sprintf("audit(%d)", time.Now().Unix()))
 
 	err := yaml.Unmarshal([]byte(req.Config.Data), &droneConfig)
 	if err != nil {
