@@ -17,8 +17,6 @@ import (
 
 var noContext = context.Background()
 
-const mockToken = "aec773e677ebc489d4e0193c8b971234"
-
 var req = &validator.Request{
 	Build: drone.Build{
 		After:  "3d21ec53a331a6f037a91c368710b99387d012c1",
