@@ -34,7 +34,7 @@ var req = &validator.Request{
 }
 
 func getSamplePipeline(sample string) (string, error) {
-	path := filepath.Join("samples", sample)
+	path := filepath.Join("testdata", sample)
 	sampleData, err := ioutil.ReadFile(path)
 	if err != nil {
 		return "", err
@@ -86,7 +86,7 @@ func TestPlugin(t *testing.T) {
 }
 
 func TestValidateInvalidPolicy(t *testing.T) {
-	plugin := New("samples/empty.rego")
+	plugin := New("testdata/empty.rego")
 	pipeline, err := getSamplePipeline("authorized-type.yml")
 	if err != nil {
 		t.Error(err)
