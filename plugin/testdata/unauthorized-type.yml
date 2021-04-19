@@ -1,6 +1,6 @@
 ---
 kind: pipeline
-type: k8s
+type: kubernetes
 name: default
 
 steps:
@@ -28,7 +28,7 @@ trigger:
 
 ---
 kind: pipeline
-type: kubernetes
+type: k8s
 name: publish
 
 steps:
@@ -40,3 +40,4 @@ steps:
       files: dist/*
     when:
       event: promote
+...
