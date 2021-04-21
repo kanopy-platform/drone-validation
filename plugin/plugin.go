@@ -27,25 +27,24 @@ func New(policy string) validator.Plugin {
 func (p *plugin) Validate(ctx context.Context, req *validator.Request) error {
 	f := bytes.NewBufferString(req.Config.Data)
 	resources, err := Parse(f)
-    if err != nil {
+	if err != nil {
 		return err
 	}
 	for _, resource := range resources {
 
+		r := rego.New(
+			rego.Query("deny = data.drone.validation.deny; msg = data.drone.validation.out"),
+			rego.Load([]string{p.policyPath}, nil),
+			rego.Input(resource))
 
-	r := rego.New(
-		rego.Query("deny = data.drone.validation.deny; msg = data.drone.validation.out"),
-		rego.Load([]string{p.policyPath}, nil),
-		rego.Input(resource))
-
-	rs, err := r.Eval(ctx)
-	if err != nil {
-		return err
-	}
-	if rs[0].Bindings["deny"] == true {
-		message := fmt.Sprintf("pipeline %v", rs[0].Bindings["msg"])
-		return errors.New(message)
-	}
+		rs, err := r.Eval(ctx)
+		if err != nil {
+			return err
+		}
+		if rs[0].Bindings["deny"] == true {
+			message := fmt.Sprintf("pipeline %v", rs[0].Bindings["msg"])
+			return errors.New(message)
+		}
 
 	}
 	return nil

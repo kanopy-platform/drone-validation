@@ -4,6 +4,10 @@ default deny = false
 
 allowed_types := ["kubernetes"]
 
+is_pipeline {
+	input.kind == "pipeline"
+}
+
 type = "docker" {
 	input.type == ""
 } else = input.type {
@@ -15,6 +19,7 @@ is_valid {
 }
 
 deny {
+	is_pipeline
 	not is_valid
 	true
 }

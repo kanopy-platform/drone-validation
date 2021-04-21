@@ -40,3 +40,8 @@ steps:
       files: dist/*
     when:
       event: promote
+
+---
+kind: secret
+name: username
+data: hl3v+FODjduX0UpXBHgYzPzVTppQblg51CVgCbgDk4U=
