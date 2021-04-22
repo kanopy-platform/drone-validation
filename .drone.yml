@@ -7,7 +7,7 @@ steps:
   - name: test
     image: golang:1.16
     commands:
-      - go vet ./...
+      - golangci-lint run
       - go test ./...
 
   - name: publish
