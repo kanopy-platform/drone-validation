@@ -12,9 +12,9 @@ The validation process relies on an [OPA policy](https://www.openpolicyagent.org
 
 Although the main purpose of this extension's policy is to validate supported pipeline types, it can be easily modified to check different attributes of the Drone configuration, including secrets.
 
-We are currently relying on a simple rego query that requires the policy to return a boolean value on the path `data.drone.validation.deny` and an error message on `data.drone.validation.out`.
+This application runs a simple rego query that requires the policy to return a boolean value on the path `data.drone.validation.deny` and an error message on `data.drone.validation.out`.
 
-The current policy (`validation.rego`) is based on the following workflow:
+The [default policy](policy/validation.rego) is based on the following workflow:
 
 ``` text
 

@@ -15,7 +15,7 @@ import (
 
 	"github.com/drone/drone-go/plugin/validator"
 	"github.com/open-policy-agent/opa/rego"
-	"gopkg.in/yaml.v2"
+	yaml "gopkg.in/yaml.v2"
 )
 
 func New(policy string) validator.Plugin {
