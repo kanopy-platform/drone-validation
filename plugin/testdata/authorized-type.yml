@@ -44,4 +44,4 @@ steps:
 ---
 kind: secret
 name: username
-data: hl3v+FODjduX0UpXBHgYzPzVTppQblg51CVgCbgDk4U=
+data: myencryptedusername=

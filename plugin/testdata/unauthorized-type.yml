@@ -25,7 +25,7 @@ trigger:
       - promote
   branch:
     - master
-
+...
 ---
 kind: pipeline
 type: k8s

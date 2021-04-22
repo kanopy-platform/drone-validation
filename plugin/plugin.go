@@ -5,8 +5,6 @@
 package plugin
 
 import (
-	"bufio"
-	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -25,19 +23,31 @@ func New(policy string) validator.Plugin {
 }
 
 func (p *plugin) Validate(ctx context.Context, req *validator.Request) error {
-	f := bytes.NewBufferString(req.Config.Data)
-	resources, err := Parse(f)
+
+	var documents []interface{}
+
+	dec := yaml.NewDecoder(strings.NewReader(req.Config.Data))
+	for {
+		var document DroneConfig
+
+		err := dec.Decode(&document)
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			return err
+		}
+		documents = append(documents, document)
+	}
+
+	r, err := rego.New(
+		rego.Query("deny = data.drone.validation.deny; msg = data.drone.validation.out"),
+		rego.Load([]string{p.policyPath}, nil)).PrepareForEval(ctx)
 	if err != nil {
 		return err
 	}
-	for _, resource := range resources {
 
-		r := rego.New(
-			rego.Query("deny = data.drone.validation.deny; msg = data.drone.validation.out"),
-			rego.Load([]string{p.policyPath}, nil),
-			rego.Input(resource))
-
-		rs, err := r.Eval(ctx)
+	for _, resource := range documents {
+		rs, err := r.Eval(ctx, rego.EvalInput(resource))
 		if err != nil {
 			return err
 		}
@@ -48,54 +58,4 @@ func (p *plugin) Validate(ctx context.Context, req *validator.Request) error {
 
 	}
 	return nil
-}
-
-func Parse(r io.Reader) ([]*DroneConfig, error) {
-	const newline = '\n'
-	var resources []*DroneConfig
-	var resource *DroneConfig
-
-	scanner := bufio.NewScanner(r)
-	for scanner.Scan() {
-		line := scanner.Text()
-		if isSeparator(line) {
-			resource = nil
-		}
-		if resource == nil {
-			resource = &DroneConfig{}
-			resources = append(resources, resource)
-		}
-		if isSeparator(line) {
-			continue
-		}
-		if isTerminator(line) {
-			break
-		}
-		if scanner.Err() == io.EOF {
-			break
-		}
-		resource.Data = append(
-			resource.Data,
-			line...,
-		)
-		resource.Data = append(
-			resource.Data,
-			newline,
-		)
-	}
-	for _, resource := range resources {
-		err := yaml.Unmarshal(resource.Data, resource)
-		if err != nil {
-			return nil, err
-		}
-	}
-	return resources, nil
-}
-
-func isSeparator(s string) bool {
-	return strings.HasPrefix(s, "---")
-}
-
-func isTerminator(s string) bool {
-	return strings.HasPrefix(s, "...")
 }

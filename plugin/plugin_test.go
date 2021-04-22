@@ -82,7 +82,7 @@ func TestPlugin(t *testing.T) {
 	t.Run("authorized pipeline type", checkOutput(plugin, "authorized-type.yml", ""))
 	t.Run("unauthorized pipeline type", checkOutput(plugin, "unauthorized-type.yml", "pipeline type 'k8s' is not supported"))
 	t.Run("empty pipeline type", checkOutput(plugin, "default-type.yml", "pipeline type 'docker' is not supported"))
-	t.Run("broken pipeline config file", checkOutput(plugin, "broken-config.yml", "yaml: mapping values are not allowed in this context"))
+	t.Run("broken pipeline config file", checkOutput(plugin, "broken-config.yml", "yaml: line 2: mapping values are not allowed in this context"))
 }
 
 func TestValidateInvalidPolicy(t *testing.T) {

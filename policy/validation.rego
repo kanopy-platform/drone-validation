@@ -8,6 +8,7 @@ is_pipeline {
 	input.kind == "pipeline"
 }
 
+# drone accepts empty types and use "docker" by default
 type = "docker" {
 	input.type == ""
 } else = input.type {
