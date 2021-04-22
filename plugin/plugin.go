@@ -24,7 +24,7 @@ func New(policy string) validator.Plugin {
 
 func (p *plugin) Validate(ctx context.Context, req *validator.Request) error {
 
-	var documents []interface{}
+	var documents []DroneConfig
 
 	dec := yaml.NewDecoder(strings.NewReader(req.Config.Data))
 	for {
