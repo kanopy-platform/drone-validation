@@ -5,10 +5,10 @@ name: default
 
 steps:
   - name: test
-    image: golang:1.16
+    image: golangci/golangci-lint:v1.38.0-alpine
     commands:
-      - golangci-lint run
-      - go test ./...
+      - golangci-lint run --timeout=5m
+      - go test -cover ./...
 
   - name: publish
     image: plugins/docker
