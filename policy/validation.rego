@@ -25,7 +25,7 @@ deny {
 	true
 }
 
-out = sprintf("type '%v' is not supported", [type]) {
+out = sprintf("unsupported pipeline types:%v", [type]) {
 	deny == true
 } else = "" {
 	true
