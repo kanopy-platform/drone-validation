@@ -53,8 +53,7 @@ func (p *plugin) Validate(ctx context.Context, req *validator.Request) error {
 		}
 		if rs[0].Bindings["deny"] == true {
 			// TODO Return errors from multiple documents on a single message
-			message := fmt.Sprintf("pipeline %v", rs[0].Bindings["msg"])
-			return errors.New(message)
+			return errors.New(fmt.Sprintf("%v", rs[0].Bindings["msg"]))
 		}
 
 	}
