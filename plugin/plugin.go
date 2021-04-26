@@ -6,7 +6,6 @@ package plugin
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"strings"
@@ -53,7 +52,7 @@ func (p *plugin) Validate(ctx context.Context, req *validator.Request) error {
 		}
 		if rs[0].Bindings["deny"] == true {
 			// TODO Return errors from multiple documents on a single message
-			return errors.New(fmt.Sprintf("%v", rs[0].Bindings["msg"]))
+			return fmt.Errorf("%v", rs[0].Bindings["msg"])
 		}
 
 	}
