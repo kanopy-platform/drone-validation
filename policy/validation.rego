@@ -4,6 +4,11 @@ default deny = false
 
 allowed_types := ["kubernetes"]
 
+is_pipeline {
+	input.kind == "pipeline"
+}
+
+# drone accepts empty types and use "docker" by default
 type = "docker" {
 	input.type == ""
 } else = input.type {
@@ -15,6 +20,7 @@ is_valid {
 }
 
 deny {
+	is_pipeline
 	not is_valid
 	true
 }
