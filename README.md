@@ -60,3 +60,10 @@ Update your `drone-server`` environment variables to include the plugin endpoint
 DRONE_VALIDATE_PLUGIN_ENDPOINT=http://<service-name>:3000
 DRONE_VALIDATE_PLUGIN_SECRET=<your_shared_secret>
 ```
+
+## Auditing
+
+Drone doesn't offer audit logging at the moment, so we can use this validation extension to generate log entries for both build and promotion job executions.
+
+Log messages are opinionated and don't contain the full list of attributes by default.
+

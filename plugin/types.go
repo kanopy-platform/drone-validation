@@ -5,8 +5,13 @@ type plugin struct {
 }
 
 type DroneConfig struct {
-	Kind  string `yaml:"kind" json:"kind"`
-	Type  string `yaml:"type" json:"type"`
-	Name  string `yaml:"name" json:"name"`
-	Data    []byte `yaml:"-" json:"-"`
+	Kind string `yaml:"kind" json:"kind"`
+	Type string `yaml:"type" json:"type"`
+	Name string `yaml:"name" json:"name"`
+	Data []byte `yaml:"-" json:"-"`
+}
+
+type Promotion struct {
+	Build       int64  `json:"build,omitempty"`
+	Environment string `json:"environment,omitempty"`
 }
