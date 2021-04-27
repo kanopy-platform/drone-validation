@@ -36,6 +36,7 @@ func (p *plugin) Validate(ctx context.Context, req *validator.Request) error {
 
 	// log each request for audit purposes
 	log.WithFields(log.Fields{
+		"type":       "audit",
 		"extension":  "validation",
 		"user":       req.Build.Sender,
 		"event":      req.Build.Event,
