@@ -10,7 +10,6 @@ import (
 	"io"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/drone/drone-go/plugin/validator"
 	"github.com/open-policy-agent/opa/rego"
@@ -19,19 +18,18 @@ import (
 )
 
 func New(policy string) validator.Plugin {
+	log.SetFormatter(&log.JSONFormatter{})
+	log.SetOutput(os.Stdout)
+
 	return &plugin{
 		policyPath: policy,
 	}
 }
 
 func (p *plugin) Validate(ctx context.Context, req *validator.Request) error {
-
-	log.SetFormatter(&log.JSONFormatter{})
-	log.SetOutput(os.Stdout)
-
 	promotion := Promotion{
-		Build:       req.Build.Parent,
-		Environment: req.Build.Deploy,
+		Build:  req.Build.Parent,
+		Deploy: req.Build.Deploy,
 	}
 
 	// log each request for audit purposes
@@ -44,7 +42,7 @@ func (p *plugin) Validate(ctx context.Context, req *validator.Request) error {
 		"branch":     req.Repo.Branch,
 		"commit":     req.Build.After,
 		"promotion":  &promotion,
-	}).Info(fmt.Sprintf("audit(%d)", time.Now().Unix()))
+	}).Info()
 
 	var documents []DroneConfig
 
