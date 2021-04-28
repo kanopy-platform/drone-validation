@@ -12,6 +12,6 @@ type DroneConfig struct {
 }
 
 type Promotion struct {
-	Build  int64  `json:"build,omitempty"`
-	Deploy string `json:"deploy,omitempty"`
+	Build    int64  `json:"build,omitempty"`
+	DeployTo string `json:"deploy_to,omitempty"`
 }
