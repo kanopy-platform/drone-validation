@@ -12,7 +12,6 @@ import (
 
 	"github.com/drone/drone-go/drone"
 	"github.com/drone/drone-go/plugin/validator"
-	"github.com/sirupsen/logrus"
 )
 
 var noContext = context.Background()
@@ -62,9 +61,6 @@ func checkOutput(plugin validator.Plugin, sampleFile, expected string) func(*tes
 }
 
 func TestPlugin(t *testing.T) {
-	// suppress log messages from test outputs
-	logrus.SetOutput(ioutil.Discard)
-
 	plugin := New("../policy/validation.rego")
 	pipeline, err := getSamplePipeline("authorized-type.yml")
 	if err != nil {
