@@ -28,8 +28,8 @@ func New(policy string) validator.Plugin {
 
 func (p *plugin) Validate(ctx context.Context, req *validator.Request) error {
 	promotion := Promotion{
-		Build:  req.Build.Parent,
-		Deploy: req.Build.Deploy,
+		Build:    req.Build.Parent,
+		DeployTo: req.Build.Deploy,
 	}
 
 	// log each request for audit purposes
