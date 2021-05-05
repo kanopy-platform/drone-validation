@@ -21,7 +21,7 @@ func New(policy string) validator.Plugin {
 	log.SetFormatter(&log.JSONFormatter{})
 	log.SetOutput(os.Stdout)
 	if policy == "" {
-		policy = "../policy"
+		policy = "./policy"
 	}
 	return &plugin{
 		policyPath: policy,
