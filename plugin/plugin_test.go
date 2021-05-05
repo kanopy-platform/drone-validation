@@ -61,7 +61,7 @@ func checkOutput(plugin validator.Plugin, sampleFile, expected string) func(*tes
 }
 
 func TestPlugin(t *testing.T) {
-	plugin := New("../policy/validation.rego")
+	plugin := New("")
 	pipeline, err := getSamplePipeline("authorized-type.yml")
 	if err != nil {
 		t.Error(err)

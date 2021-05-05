@@ -19,7 +19,7 @@ import (
 type spec struct {
 	Bind       string `envconfig:"DRONE_BIND"`
 	Debug      bool   `envconfig:"DRONE_DEBUG"`
-	Secret     string `envconfig:"DRONE_SECRET"`
+	Secret     string `envconfig:"DRONE_VALIDATE_PLUGIN_SECRET"`
 	PolicyPath string `envconfig:"DRONE_POLICY_PATH"`
 }
 
