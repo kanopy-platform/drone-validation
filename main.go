@@ -51,5 +51,10 @@ func main() {
 	logrus.Infof("server listening on address %s", spec.Bind)
 
 	http.Handle("/", handler)
+	http.HandleFunc("/healthz", healthz)
 	logrus.Fatal(http.ListenAndServe(spec.Bind, nil))
+}
+
+func healthz(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusOK)
 }
