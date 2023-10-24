@@ -67,3 +67,5 @@ Drone doesn't offer audit logging at the moment, so we can use this validation e
 
 Log messages are opinionated and don't contain the full list of build attributes by default.
 
+a
+
