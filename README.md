@@ -43,15 +43,17 @@ Create a shared secret:
 openssl rand -hex 16
 ```
 
-Download and run the plugin:
+Run the plugin:
 
 ```shell
+docker build -t drone-validation .
+
 docker run -d \
   --publish=3000:3000 \
   --env=DRONE_DEBUG=true \
   --env=DRONE_SECRET=<your_shared_secret> \
   --restart=always \
-  --name=<container_name> quay.io/mongodb-labs/drone-validation:latest 
+  --name=drone-validation drone-validation
 ```
 
 Update your `drone-server`` environment variables to include the plugin endpoint and shared secret.
@@ -66,4 +68,3 @@ DRONE_VALIDATE_PLUGIN_SECRET=<your_shared_secret>
 Drone doesn't offer audit logging at the moment, so we can use this validation extension to generate log entries for both build and promotion job executions.
 
 Log messages are opinionated and don't contain the full list of build attributes by default.
-
