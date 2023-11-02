@@ -6,7 +6,7 @@ package plugin
 
 import (
 	"context"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"reflect"
 	"testing"
@@ -35,7 +35,7 @@ var req = &validator.Request{
 
 func getSamplePipeline(sample string) (string, error) {
 	path := filepath.Join("testdata", sample)
-	sampleData, err := ioutil.ReadFile(path)
+	sampleData, err := os.ReadFile(path)
 	if err != nil {
 		return "", err
 	}
@@ -102,7 +102,8 @@ func TestValidateDefaultPolicy(t *testing.T) {
 		policyPath: "./policy",
 	}
 	got := New("")
-    if !reflect.DeepEqual(got, want) {
+
+	if !reflect.DeepEqual(got, want) {
 		t.Error("invalid default policyPath")
 		return
 
