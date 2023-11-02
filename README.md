@@ -35,23 +35,21 @@ The [default policy](policy/validation.rego) is based on the following workflow:
 
 ```
 
-## Installation
+## Usage
 
-Create a shared secret:
+This is for demonstration purpose only and will need to be adapted for real world deployments.
 
-```shell
-openssl rand -hex 16
-```
-
-Run the plugin:
+See [Drone docs](https://docs.drone.io/extensions/validation/) for more info.
 
 ```shell
 docker build -t drone-validation .
 
+SHARED_SECRET=$(openssl rand -hex 16)
+
 docker run \
   --publish=3000:3000 \
   --env=DRONE_DEBUG=true \
-  --env=DRONE_VALIDATE_PLUGIN_SECRET=$(openssl rand -hex 16) \
+  --env=DRONE_VALIDATE_PLUGIN_SECRET=$SHARED_SECRET \
   drone-validation
 ```
 
