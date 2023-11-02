@@ -60,7 +60,7 @@ func checkOutput(plugin validator.Plugin, sampleFile, expected string) func(*tes
 	}
 }
 
-func TestPlugin(t *testing.T) {
+func TestDefaultPolicy(t *testing.T) {
 	plugin := New()
 	pipeline, err := getSamplePipeline("authorized-type.yml")
 	if err != nil {
