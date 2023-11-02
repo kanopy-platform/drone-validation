@@ -8,7 +8,6 @@ import (
 	"context"
 	"os"
 	"path/filepath"
-	"reflect"
 	"testing"
 
 	"github.com/drone/drone-go/drone"
@@ -62,7 +61,7 @@ func checkOutput(plugin validator.Plugin, sampleFile, expected string) func(*tes
 }
 
 func TestPlugin(t *testing.T) {
-	plugin := New("../policy")
+	plugin := New()
 	pipeline, err := getSamplePipeline("authorized-type.yml")
 	if err != nil {
 		t.Error(err)
@@ -83,7 +82,7 @@ func TestPlugin(t *testing.T) {
 }
 
 func TestValidateInvalidPolicy(t *testing.T) {
-	plugin := New("testdata/empty.rego")
+	plugin := New(WithPolicyPath("testdata/empty.rego"))
 	pipeline, err := getSamplePipeline("authorized-type.yml")
 	if err != nil {
 		t.Error(err)
@@ -94,18 +93,5 @@ func TestValidateInvalidPolicy(t *testing.T) {
 	if err == nil {
 		t.Error(err)
 		return
-	}
-}
-
-func TestValidateDefaultPolicy(t *testing.T) {
-	want := &plugin{
-		policyPath: "./policy",
-	}
-	got := New("")
-
-	if !reflect.DeepEqual(got, want) {
-		t.Error("invalid default policyPath")
-		return
-
 	}
 }

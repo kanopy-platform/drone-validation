@@ -6,6 +6,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/drone/drone-go/plugin/validator"
 	_ "github.com/joho/godotenv/autoload"
@@ -23,6 +24,9 @@ type spec struct {
 }
 
 func main() {
+	logrus.SetFormatter(&logrus.JSONFormatter{})
+	logrus.SetOutput(os.Stdout)
+
 	spec := new(spec)
 	err := envconfig.Process("", spec)
 	if err != nil {
@@ -41,9 +45,7 @@ func main() {
 
 	handler := validator.Handler(
 		spec.Secret,
-		plugin.New(
-			spec.PolicyPath,
-		),
+		plugin.New(plugin.WithPolicyPath(spec.PolicyPath)),
 		logrus.StandardLogger(),
 	)
 
