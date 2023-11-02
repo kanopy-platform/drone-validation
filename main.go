@@ -10,7 +10,7 @@ import (
 
 	"github.com/drone/drone-go/plugin/validator"
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/kanopy-platform/drone-validation/plugin"
+	"github.com/kanopy-platform/drone-validation/pkg/plugin"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/sirupsen/logrus"
 )
