@@ -1,4 +1,4 @@
-module github.com/10gen-ops/drone-validation
+module github.com/kanopy-platform/drone-validation
 
 go 1.21
 
