@@ -48,12 +48,11 @@ Run the plugin:
 ```shell
 docker build -t drone-validation .
 
-docker run -d \
+docker run \
   --publish=3000:3000 \
   --env=DRONE_DEBUG=true \
-  --env=DRONE_SECRET=<your_shared_secret> \
-  --restart=always \
-  --name=drone-validation drone-validation
+  --env=DRONE_VALIDATE_PLUGIN_SECRET=$(openssl rand -hex 16) \
+  drone-validation
 ```
 
 Update your `drone-server`` environment variables to include the plugin endpoint and shared secret.
