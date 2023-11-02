@@ -6,9 +6,9 @@ package plugin
 
 import (
 	"context"
+	_ "embed"
 	"fmt"
 	"io"
-	"os"
 	"strings"
 
 	"github.com/drone/drone-go/plugin/validator"
@@ -17,15 +17,23 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-func New(policy string) validator.Plugin {
-	log.SetFormatter(&log.JSONFormatter{})
-	log.SetOutput(os.Stdout)
-	if policy == "" {
-		policy = "./policy"
+//go:embed policy/validation.rego
+var defaultPolicy string
+
+func WithPolicyPath(path string) func(*plugin) {
+	return func(p *plugin) {
+		p.policyPath = path
 	}
-	return &plugin{
-		policyPath: policy,
+}
+
+func New(opts ...func(*plugin)) validator.Plugin {
+	p := &plugin{}
+
+	for _, opt := range opts {
+		opt(p)
 	}
+
+	return p
 }
 
 func (p *plugin) Validate(ctx context.Context, req *validator.Request) error {
@@ -61,15 +69,23 @@ func (p *plugin) Validate(ctx context.Context, req *validator.Request) error {
 		documents = append(documents, document)
 	}
 
-	r, err := rego.New(
+	regoOpts := []func(*rego.Rego){
 		rego.Query("deny = data.drone.validation.deny; msg = data.drone.validation.out"),
-		rego.Load([]string{p.policyPath}, nil)).PrepareForEval(ctx)
+	}
+
+	if p.policyPath != "" {
+		regoOpts = append(regoOpts, rego.Load([]string{p.policyPath}, nil))
+	} else {
+		regoOpts = append(regoOpts, rego.Module("validation.rego", defaultPolicy))
+	}
+
+	query, err := rego.New(regoOpts...).PrepareForEval(ctx)
 	if err != nil {
 		return err
 	}
 
 	for _, resource := range documents {
-		rs, err := r.Eval(ctx, rego.EvalInput(resource))
+		rs, err := query.Eval(ctx, rego.EvalInput(resource))
 		if err != nil {
 			return err
 		}

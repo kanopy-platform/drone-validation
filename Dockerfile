@@ -1,4 +1,4 @@
-FROM golang:1.14-alpine
+FROM golang:1.21-alpine
 
 ENV PORT 3000
 
