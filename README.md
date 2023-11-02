@@ -37,7 +37,7 @@ The [default policy](policy/validation.rego) is based on the following workflow:
 
 ## Usage
 
-This is for demonstration purpose only and will need to be adapted for real world deployments.
+This is for demonstration purposes only and will need to be adapted for real world deployments.
 
 See [Drone docs](https://docs.drone.io/extensions/validation/) for more info.
 
