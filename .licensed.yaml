@@ -1,0 +1,23 @@
+---
+sources:
+  go: true
+allowed:
+  - mit
+  - apache-2.0
+  - mpl-2.0
+  - bsd-2-clause
+  - bsd-3-clause
+  - isc
+ignored:
+  go:
+    - github.com/xeipuuv/gojsonpointer # apache
+    - github.com/xeipuuv/gojsonreference # apache
+reviewed:
+  go:
+    - github.com/gorilla/mux # BSD-3-Clause
+    - github.com/rcrowley/go-metrics # BSD
+    - golang.org/x/**/*  # bsd-style
+    - google.golang.org/protobuf/**/* # BSD-3-Clause
+    - gopkg.in/yaml.v2 # apache
+    - sigs.k8s.io/yaml # MIT
+    - sigs.k8s.io/yaml/**/* # MIT
