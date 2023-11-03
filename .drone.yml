@@ -5,9 +5,17 @@ name: default
 trigger:
   branch: master
 
+workspace:
+  path: /go/src/github.com/${DRONE_REPO}
+
 steps:
   - name: test
-    image: golangci/golangci-lint:v1.55.1-alpine
+    image: golangci/golangci-lint:v1.55.1
     commands:
-      - golangci-lint run --timeout=5m
-      - go test -cover ./...
+      - make test
+
+  - name: license-check
+    image: public.ecr.aws/kanopy/licensed-go:4.0.4-0.1.0
+    commands:
+      - licensed cache
+      - licensed status
